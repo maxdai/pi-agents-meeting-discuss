@@ -109,9 +109,11 @@ python3 start_discussion.py --dir mymeet --spec myspec/ --result-writer c --star
 - **pure 近似**：Pi 没有 opencode 的 `--pure`；本项目把它映射为关闭外部
   extension/skill/prompt-template/theme 加载。
 
-## 设计与迁移文档
+## 设计与文档
 
-- `docs/opencode-vs-pi.md`：记录从 opencode 版迁移到 Pi 版的完整分析、差异对比与代码映射。
+- `docs/pi-meeting-design.md`：**Pi 版项目设计文档**（协议、架构、Pi 适配、spec、生命周期、测试策略）。
+- `docs/opencode-vs-pi.md`：opencode/pi 命令行与运行环境对比与迁移设计。
+- `docs/e2e-validation.md`：真实 Pi 讨论端到端验证记录。
 
 ## 讨论机制（双阶段协议）
 

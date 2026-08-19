@@ -14,7 +14,9 @@ Pi 版的多 agent 会议式讨论工具：多个 LLM agent（每个一个独立
 
 ## 文档
 
+- `docs/pi-meeting-design.md`：**Pi 版项目设计文档**。
 - `docs/opencode-vs-pi.md`：opencode/pi 命令行与运行环境对比、迁移设计、代码映射。
+- `docs/e2e-validation.md`：真实 Pi 讨论端到端验证记录。
 
 ## 源码
 
