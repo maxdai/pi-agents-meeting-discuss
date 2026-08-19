@@ -51,3 +51,11 @@ meeting_loop 通过注入 responder 复用。
   模型/思考档位用 `pi-agent.json` 里的 `--model` / `--thinking`。
 - session 必须放在 `<base>/pi-sessions/`：保证 `--cleanup` 一次删除、不留全局残留。
 - `--mode json` 首行是 SessionHeader，可从 `{"type":"session","id":...}` 读取 sessionID。
+
+## Git 准则（用户约定，2026-08-19）
+
+1. **每次改动先更新本地 git**：对本项目代码/文档的每次修改，先 `git add` + `git commit` 记录。
+2. **阶段性完成即推送**：完成一个阶段性修改后（例如新增文档、完成一批修复、跑通一次验证），
+   必须同时 `git push origin main` 推送到 GitHub。
+3. **本地与远程保持同步**：提交后确认工作区干净、远程与本地 HEAD 一致。
+4. **提交信息**：使用清晰、描述性的 message，说明本次改动内容。
