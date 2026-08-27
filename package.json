@@ -1,0 +1,29 @@
+{
+  "name": "pi-meeting",
+  "version": "0.1.0",
+  "description": "Pi skill + wrapper for pi-agents-meeting-discuss: launch a multi-agent discussion from a Pi session.",
+  "type": "module",
+  "private": false,
+  "license": "MIT",
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  },
+  "files": [
+    "scripts",
+    "skills",
+    "*.py",
+    "templates",
+    "README.md",
+    "AGENTS.md",
+    "docs/pi-meeting-skill-design.md"
+  ],
+  "keywords": [
+    "pi",
+    "pi-skill",
+    "meeting",
+    "multi-agent",
+    "discussion"
+  ]
+}

@@ -12,6 +12,12 @@ Pi 版的多 agent 会议式讨论工具：多个 LLM agent（每个一个独立
 测试装置完全一致，仅替换真实 LLM 适配薄层（`meeting_loop.py`）和环境生成细节
 （`.pi/agent/*.md` + `pi-agent.json` + `pi-sessions/`）。
 
+## npm / skill
+
+- `package.json`：npm 包 `pi-meeting`，通过 `pi.skills` 暴露 skill。
+- `scripts/discuss.sh`：wrapper（启动/状态/等待/清理）。
+- `skills/meeting-discuss/SKILL.md`：手工触发 skill。
+
 ## 文档
 
 - `docs/pi-meeting-design.md`：**Pi 版项目设计文档**。

@@ -115,6 +115,16 @@ python3 start_discussion.py --dir mymeet --spec myspec/ --result-writer c --star
 - `docs/opencode-vs-pi.md`：opencode/pi 命令行与运行环境对比与迁移设计。
 - `docs/e2e-validation.md`：真实 Pi 讨论端到端验证记录。
 
+## Pi Meeting Skill（npm 包 pi-meeting）
+
+项目同时以 npm 包 `pi-meeting` 形式分发，作为 Pi 扩展携带：
+
+- `skills/meeting-discuss/SKILL.md`：手工触发的多 agent 讨论 skill（`/skill:meeting-discuss`）
+- `scripts/discuss.sh`：wrapper，封装启动/状态/等待/清理
+- Python 核心：`start_discussion.py` 等
+
+设计见 `docs/pi-meeting-skill-design.md`。
+
 ## 讨论机制（双阶段协议）
 
 ```
