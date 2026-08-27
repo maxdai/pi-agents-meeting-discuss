@@ -59,3 +59,4 @@ meeting_loop 通过注入 responder 复用。
    必须同时 `git push origin main` 推送到 GitHub。
 3. **本地与远程保持同步**：提交后确认工作区干净、远程与本地 HEAD 一致。
 4. **提交信息**：使用清晰、描述性的 message，说明本次改动内容。
+5. **skill 设计文档同步**：对 `pi-meeting` skill 的任何修改（wrapper、SKILL.md、npm 结构、流程、默认参数等），必须同步更新 `docs/pi-meeting-skill-design.md`。
