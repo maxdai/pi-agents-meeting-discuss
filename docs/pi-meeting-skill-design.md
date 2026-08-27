@@ -51,8 +51,11 @@ pi-agents-meeting-discuss/
 ## 5. wrapper 接口
 
 ```bash
-# 启动（立即返回）
-./scripts/discuss.sh "<问题>" [--background "<背景>"]
+# 第 1 步：生成 spec（不启动）
+./scripts/discuss.sh --prepare "<问题>" [--background "<背景>"]
+
+# 第 2 步：用编辑好的 spec 启动讨论（由主 pi 执行，不是用户）
+./scripts/discuss.sh --start <spec目录>
 
 # 观察
 ./scripts/discuss.sh --status <dir>
@@ -66,11 +69,15 @@ pi-agents-meeting-discuss/
 
 | 参数 | 必填 | 说明 |
 |---|---|---|
-| `<问题>` | 是 | 讨论主题/问题 |
-| `--background` | 否 | 背景说明；不传则无背景 |
+| `--prepare` | 是（该模式） | 生成临时 spec，输出路径并提示用户查看/编辑 |
+| `<问题>` | 是 | 讨论主题/问题（配合 `--prepare`） |
+| `--background` | 否 | 背景说明；不传则无背景（配合 `--prepare`） |
+| `--start <spec>` | 是（该模式） | 使用已编辑的 spec 启动讨论 |
 | `--status <dir>` | 是（该模式） | 查看讨论状态 |
 | `--wait <dir>` | 是（该模式） | 阻塞等待讨论完成 |
 | `--cleanup <dir>` | 是（该模式） | 清理讨论目录 |
+
+`--prepare` 输出提示必须明确：用户只需要查看/编辑 spec，**不要**让用户自行执行 `--start`；编辑完成后由主 pi 继续执行 `--start`。
 
 ## 6. 默认讨论参数
 
@@ -88,9 +95,12 @@ pi-agents-meeting-discuss/
 ## 8. 核心流程（SKILL.md 教给主 pi）
 
 1. 用户手工 `/skill:meeting-discuss "<问题>" [background]`
-2. 主 pi 运行 `./scripts/discuss.sh "<问题>" [--background "..."]`，启动后立即返回
-3. wrapper 输出精确信息：讨论目录、后续可用命令
-4. 主 pi **在当前回合内持续轮询** `./scripts/discuss.sh --status <dir>`，直到 `done` 或 `stopped` 才结束回合：
+2. 主 pi 运行 `./scripts/discuss.sh --prepare "<问题>" [--background "..."]`，生成临时 spec
+3. wrapper 输出 spec 路径，并提示用户查看/编辑；**不要**让用户自行执行 `--start`
+4. 用户查看/编辑 spec 后，告诉主 pi“继续”
+5. 主 pi 运行 `./scripts/discuss.sh --start <spec目录>`，启动后立即返回
+6. wrapper 输出精确信息：讨论目录、后续可用命令
+7. 主 pi **在当前回合内持续轮询** `./scripts/discuss.sh --status <dir>`，直到 `done` 或 `stopped` 才结束回合：
    - `done` → 读取 result.md
    - `running` → 继续循环调用 `--status`，**不要结束回合**
    - `stopped` 且没有 result.md → 报告错误
@@ -98,12 +108,26 @@ pi-agents-meeting-discuss/
      - 当前状态（running / done / stopped）
      - 已产生的消息数量或最新进展（可从 `git log` 或 `loop-*.log` 读取）
      - 如果还在运行，说明会继续等待
-5. 读取 result.md 后，主 pi 自己阅读并总结，并提示完整内容在 result.md
-6. 最后执行 `./scripts/discuss.sh --cleanup <dir>`
+8. 读取 result.md 后，主 pi 自己阅读并总结，并提示完整内容在 result.md
+9. 最后执行 `./scripts/discuss.sh --cleanup <dir>`
 
 ## 9. wrapper 输出
 
-尽量精确描述，避免 LLM 误判。启动后输出示例：
+尽量精确描述，避免 LLM 误判。
+
+### `--prepare` 输出示例
+
+```text
+已生成讨论 spec:
+  <cwd>/pi-meeting-spec-<时间戳>
+
+请查看/编辑该目录，补充背景、各 agent 视角等。
+编辑完成后，告诉我“继续”，我会自动启动讨论。
+```
+
+注意：**不要**提示用户自行执行 `--start`。
+
+### `--start` 启动后输出示例
 
 ```text
 讨论已启动

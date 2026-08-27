@@ -23,16 +23,30 @@ disable-model-invocation: true
 
 ## 使用步骤
 
-### 1. 启动讨论
+### 1. 生成讨论 spec
 
-运行（在项目根目录下，wrapper 相对本 skill 目录）：
+运行：
 
 ```bash
-../../scripts/discuss.sh "<问题>" [--background "<背景>"]
+../../scripts/discuss.sh --prepare "<问题>" [--background "<背景>"]
 ```
 
 - `<问题>` 必填，是讨论主题。
 - `--background` 可选；如果话题涉及敏感/禁忌边界，建议提供背景说明。
+
+wrapper 会生成一个临时 spec 目录，并输出路径。
+
+**向用户展示 spec 路径，请用户查看/编辑该目录**（可以补充背景、各 agent 视角等）。
+
+**不要**让用户自行执行 `--start`。用户编辑完成后，告诉主 pi“继续”。
+
+### 2. 启动讨论
+
+用户确认“继续”后，主 pi 运行：
+
+```bash
+../../scripts/discuss.sh --start <spec目录>
+```
 
 启动后 wrapper 会输出：
 
@@ -41,7 +55,7 @@ disable-model-invocation: true
 - 等待完成命令
 - 清理命令
 
-### 2. 持续轮询状态（不要结束回合）
+### 3. 持续轮询状态（不要结束回合）
 
 启动后，**在当前回合内持续循环执行**以下命令，直到 `done` 或 `stopped`：
 
@@ -64,7 +78,7 @@ disable-model-invocation: true
 
 只有出现 `done` 或 `stopped` 才停止轮询。
 
-### 3. 等待完成（可选）
+### 4. 等待完成（可选）
 
 也可以阻塞等待：
 
@@ -74,7 +88,7 @@ disable-model-invocation: true
 
 完成时会打印 `result.md` 路径。
 
-### 4. 读取 result.md
+### 5. 读取 result.md
 
 - 如果使用 `--wait`，按它打印的路径读取。
 - 如果使用 `--status` 轮询到 `done`，默认读取：
@@ -87,7 +101,7 @@ disable-model-invocation: true
 
 > 完整结论见 `<result.md 路径>`。
 
-### 5. 清理
+### 6. 清理
 
 读取完 `result.md` 后，必须清理讨论目录：
 
