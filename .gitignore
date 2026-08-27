@@ -3,3 +3,4 @@ __pycache__/
 discussion-*/
 pi-sessions/
 .pi/
+pi-meeting-*.tgz
