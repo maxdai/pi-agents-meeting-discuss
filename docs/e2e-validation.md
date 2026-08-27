@@ -47,3 +47,27 @@ verify-spec/
 - 模型/thinking 配置通过 `pi-agent.json` → `--model/--thinking` 被 Pi 真实采用。
 - 完整会议协议（自由发言 → 冻结 → RR 收尾）跑通，并生成了 `result.md`。
 - 本次验证未修改任何项目代码。
+
+## 6. pi-meeting skill 端到端验证（2026-08-27）
+
+### 验证方式
+
+- 在主 pi 会话中由用户手工触发 `/skill:meeting-discuss`
+- wrapper 启动后台讨论，主 pi 等待/轮询，读取 result.md，最后清理
+
+### 实际结果
+
+| 项目 | 结果 |
+|---|---|
+| 讨论目录 | `/root/discuss-20260827-211957`（已清理） |
+| agents | a、b、c（3 个，`--pure`） |
+| 状态 | 正常完成，三方收敛 |
+| result.md | 生成并保存到 `/root/discuss-20260827-211957-result.md` |
+| 主 pi 行为 | 读取 result.md、给出摘要、执行清理 |
+| 残留 | 无残留进程、无残留讨论目录 |
+
+### 结论
+
+- `pi-meeting` skill + wrapper 的完整流程真实可用：
+  启动 → 后台讨论 → 等待/轮询 → 读取 result.md → 摘要 → 清理。
+- 验证了 SKILL.md 的流程设计（手工触发、异步、报告进展、清理）。
