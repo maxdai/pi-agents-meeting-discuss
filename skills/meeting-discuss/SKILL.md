@@ -52,6 +52,12 @@ disable-model-invocation: true
 - `stopped`：讨论进程已结束，但没有 `result.md`——报告错误。
 - `not-exists`：目录不存在，检查路径。
 
+每次查看状态后，**必须向用户报告当前进展**：
+
+- 当前状态（running / done / stopped）
+- 已产生的消息数量或最新进展（可从 `git log` 或 `loop-*.log` 读取）
+- 如果还在运行，说明会继续等待
+
 ### 3. 等待完成（可选）
 
 也可以阻塞等待：

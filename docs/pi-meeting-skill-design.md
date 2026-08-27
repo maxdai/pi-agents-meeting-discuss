@@ -94,6 +94,10 @@ pi-agents-meeting-discuss/
    - `done` → 读取 result.md
    - `running` → 继续等
    - `stopped` 且没有 result.md → 报告错误
+   - **每次查看状态后，主 pi 必须向用户报告当前进展**：
+     - 当前状态（running / done / stopped）
+     - 已产生的消息数量或最新进展（可从 `git log` 或 `loop-*.log` 读取）
+     - 如果还在运行，说明会继续等待
 5. 读取 result.md 后，主 pi 自己阅读并总结，并提示完整内容在 result.md
 6. 最后执行 `./scripts/discuss.sh --cleanup <dir>`
 
