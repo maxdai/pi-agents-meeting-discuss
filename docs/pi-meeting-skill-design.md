@@ -90,9 +90,9 @@ pi-agents-meeting-discuss/
 1. 用户手工 `/skill:meeting-discuss "<问题>" [background]`
 2. 主 pi 运行 `./scripts/discuss.sh "<问题>" [--background "..."]`，启动后立即返回
 3. wrapper 输出精确信息：讨论目录、后续可用命令
-4. 主 pi 轮询 `./scripts/discuss.sh --status <dir>`：
+4. 主 pi **在当前回合内持续轮询** `./scripts/discuss.sh --status <dir>`，直到 `done` 或 `stopped` 才结束回合：
    - `done` → 读取 result.md
-   - `running` → 继续等
+   - `running` → 继续循环调用 `--status`，**不要结束回合**
    - `stopped` 且没有 result.md → 报告错误
    - **每次查看状态后，主 pi 必须向用户报告当前进展**：
      - 当前状态（running / done / stopped）

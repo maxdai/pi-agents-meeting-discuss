@@ -16,7 +16,9 @@ disable-model-invocation: true
 ## 重要
 
 - 本 skill 由用户手动触发，不要自行判断触发。
-- 讨论是异步的：启动后立即返回，需要轮询状态。
+- 讨论是异步的：启动后立即返回，但**主 pi 不能结束当前回合**。
+- 启动后必须持续轮询状态，直到 `done` 或 `stopped`，再结束回合。
+- 每次轮询后必须向用户报告进展。
 - 读取 `result.md` 后必须清理讨论目录，避免残留 session。
 
 ## 使用步骤
@@ -39,7 +41,9 @@ disable-model-invocation: true
 - 等待完成命令
 - 清理命令
 
-### 2. 查看状态
+### 2. 持续轮询状态（不要结束回合）
+
+启动后，**在当前回合内持续循环执行**以下命令，直到 `done` 或 `stopped`：
 
 ```bash
 ../../scripts/discuss.sh --status <目录>
@@ -56,7 +60,9 @@ disable-model-invocation: true
 
 - 当前状态（running / done / stopped）
 - 已产生的消息数量或最新进展（可从 `git log` 或 `loop-*.log` 读取）
-- 如果还在运行，说明会继续等待
+- 如果还在运行，说明会继续等待，并**继续循环调用 `--status`**，不要结束回合
+
+只有出现 `done` 或 `stopped` 才停止轮询。
 
 ### 3. 等待完成（可选）
 
