@@ -32,7 +32,7 @@ usage() {
   $0 --cleanup <dir>
 
 默认讨论参数:
-  agents=a,b,c  max-meeting=10  max-rr=5  --pure
+  agents=a,b,c  max-meeting=10  max-rr=5
 USAGE_EOF
 }
 
@@ -259,7 +259,7 @@ cmd_start() {
     dir_name="${dir_name}-${stamp}"
     local dir_path="$PWD/$dir_name"
 
-    if ! "$PYTHON" "$START_DISCUSSION" --dir "$dir_path" --spec "$spec_dir" --max-meeting "$DEFAULT_MAX_MEETING" --max-rr "$DEFAULT_MAX_RR" --pure --start; then
+    if ! "$PYTHON" "$START_DISCUSSION" --dir "$dir_path" --spec "$spec_dir" --max-meeting "$DEFAULT_MAX_MEETING" --max-rr "$DEFAULT_MAX_RR" --start; then
         fail "讨论启动失败，请查看上方输出"
     fi
 

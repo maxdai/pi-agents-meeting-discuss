@@ -118,7 +118,6 @@ wrapper 会生成一个临时 spec 目录，并输出路径。
 - agents：`a,b,c`（3 个）
 - `--max-meeting 10`
 - `--max-rr 5`
-- `--pure`
 
 ## 错误处理
 

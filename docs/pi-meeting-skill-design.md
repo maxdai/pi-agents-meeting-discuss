@@ -84,8 +84,8 @@ pi-agents-meeting-discuss/
 - agents：3
 - `--max-meeting 10`
 - `--max-rr 5`
-- `--pure`
 - model/thinking：wrapper 自动基于当前工作目录（`$PWD`）定位主 pi 的 session 文件（优先 `PI_SESSION_FILE`，否则按 cwd 编码路径查找），解析最后一个 `model_change` / `thinking_level_change` 写入 `models.md`；读取不到时回退默认。
+- 不默认启用 `--pure`：子讨论 agents 会加载全局扩展（Pi 内存占用低于 opencode，pure 不再必要）。
 
 ## 7. 讨论目录
 
