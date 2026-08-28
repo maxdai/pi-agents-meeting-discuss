@@ -65,9 +65,24 @@ cmd_cleanup() {
     "$PYTHON" "$START_DISCUSSION" --dir "$dir" --cleanup
 }
 
+# 定位主 pi 的 session 文件：优先 PI_SESSION_FILE，否则用当前 cwd 编码路径查找
+find_pi_session_file() {
+    local session_file="${PI_SESSION_FILE:-}"
+    if [ -n "$session_file" ] && [ -f "$session_file" ]; then
+        echo "$session_file"
+        return
+    fi
+    # cwd 编码：/root/book/sh -> --root-book-sh--
+    local encoded
+    encoded="--$(printf '%s' "$PWD" | sed 's|^/||; s|/|-|g')--"
+    local session_dir="$HOME/.pi/agent/sessions/$encoded"
+    ls -t "$session_dir"/*.jsonl 2>/dev/null | head -1
+}
+
 # 从主 pi session 文件读取最后一个 model_change / thinking_level_change
 read_pi_model_thinking_from_session() {
-    local session_file="${PI_SESSION_FILE:-}"
+    local session_file
+    session_file="$(find_pi_session_file)"
     if [ -z "$session_file" ] || [ ! -f "$session_file" ]; then
         echo "|"
         return

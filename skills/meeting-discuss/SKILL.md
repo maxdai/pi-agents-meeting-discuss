@@ -34,7 +34,7 @@ disable-model-invocation: true
 - `<问题>` 必填，是讨论主题。
 - `--background` 可选；如果话题涉及敏感/禁忌边界，建议提供背景说明。
 
-wrapper 会自动从主 pi 的 session 文件读取当前 model/thinking，并写入 `models.md`；如果读取不到，则使用默认值。
+wrapper 会自动基于当前工作目录定位主 pi 的 session 文件，读取当前 model/thinking，并写入 `models.md`；如果读取不到，则使用默认值。
 
 wrapper 会生成一个临时 spec 目录，并输出路径。
 
