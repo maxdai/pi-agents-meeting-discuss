@@ -259,12 +259,35 @@ cmd_start() {
     dir_name="${dir_name}-${stamp}"
     local dir_path="$PWD/$dir_name"
 
-    if ! "$PYTHON" "$START_DISCUSSION" --dir "$dir_path" --spec "$spec_dir" --max-meeting "$DEFAULT_MAX_MEETING" --max-rr "$DEFAULT_MAX_RR" --start; then
-        fail "讨论启动失败，请查看上方输出"
+    # 第 1 步：创建讨论环境（不启动）
+    if ! "$PYTHON" "$START_DISCUSSION" --dir "$dir_path" --spec "$spec_dir" --max-meeting "$DEFAULT_MAX_MEETING" --max-rr "$DEFAULT_MAX_RR"; then
+        fail "讨论环境创建失败，请查看上方输出"
     fi
 
-    # spec 已被消费，删除临时 spec
+    # 第 2 步：在每个 work 目录写入项目级 .pi/settings.json，禁用 magic-context 和 aft
+    local agent
+    for agent in a b c; do
+        local workdir="$dir_path/work-$agent"
+        if [ -d "$workdir" ]; then
+            mkdir -p "$workdir/.pi"
+            cat > "$workdir/.pi/settings.json" <<'SETTINGS_EOF'
+{
+  "packages": [
+    { "source": "npm:@cortexkit/pi-magic-context", "autoload": false },
+    { "source": "npm:@cortexkit/aft-pi", "autoload": false }
+  ]
+}
+SETTINGS_EOF
+        fi
+    done
+
+    # 临时 spec 已被消费，删除
     rm -rf "$spec_dir"
+
+    # 第 3 步：启动已有环境
+    if ! "$PYTHON" "$START_DISCUSSION" --dir "$dir_path" --skip-setup --start; then
+        fail "讨论启动失败，请查看上方输出"
+    fi
 
     cat <<OUTPUT_EOF
 讨论已启动

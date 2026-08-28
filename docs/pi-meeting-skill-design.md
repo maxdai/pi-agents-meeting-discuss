@@ -86,6 +86,7 @@ pi-agents-meeting-discuss/
 - `--max-rr 5`
 - model/thinking：wrapper 自动基于当前工作目录（`$PWD`）定位主 pi 的 session 文件（优先 `PI_SESSION_FILE`，否则按 cwd 编码路径查找），解析最后一个 `model_change` / `thinking_level_change` 写入 `models.md`；读取不到时回退默认。
 - 不默认启用 `--pure`：子讨论 agents 会加载全局扩展（Pi 内存占用低于 opencode，pure 不再必要）。
+- 子讨论 agents 默认通过项目级 `.pi/settings.json` 禁用 `magic-context` 和 `aft` 两个扩展（`autoload: false`），其它扩展正常加载。
 
 ## 7. 讨论目录
 
