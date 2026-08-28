@@ -85,6 +85,7 @@ pi-agents-meeting-discuss/
 - `--max-meeting 10`
 - `--max-rr 5`
 - `--pure`
+- model/thinking：wrapper 自动从主 pi 的 `PI_SESSION_FILE`（session 文件）解析最后一个 `model_change` / `thinking_level_change` 写入 `models.md`；读取不到时回退默认。
 
 ## 7. 讨论目录
 

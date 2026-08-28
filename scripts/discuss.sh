@@ -65,16 +65,63 @@ cmd_cleanup() {
     "$PYTHON" "$START_DISCUSSION" --dir "$dir" --cleanup
 }
 
-# 读取主 pi 的 model/thinking（缺失时回退默认）
+# 从主 pi session 文件读取最后一个 model_change / thinking_level_change
+read_pi_model_thinking_from_session() {
+    local session_file="${PI_SESSION_FILE:-}"
+    if [ -z "$session_file" ] || [ ! -f "$session_file" ]; then
+        echo "|"
+        return
+    fi
+    "$PYTHON" - "$session_file" <<'PYEOF'
+import json, sys
+model = ""
+thinking = ""
+try:
+    with open(sys.argv[1], encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                ev = json.loads(line)
+            except ValueError:
+                continue
+            if ev.get("type") == "model_change":
+                provider = ev.get("provider", "")
+                model_id = ev.get("modelId", "")
+                if provider and model_id:
+                    model = f"{provider}/{model_id}"
+                elif model_id:
+                    model = model_id
+            elif ev.get("type") == "thinking_level_change":
+                thinking = ev.get("thinkingLevel", "")
+except Exception:
+    pass
+print(f"{model}|{thinking}")
+PYEOF
+}
+
+# 读取主 pi 的 model/thinking（优先 session 文件，其次环境变量，缺失回退默认）
 read_pi_model_thinking() {
+    local from_session
+    from_session="$(read_pi_model_thinking_from_session)"
+    local session_model="${from_session%%|*}"
+    local session_thinking="${from_session##*|}"
     local provider="${PI_PROVIDER:-}"
     local model="${PI_MODEL:-}"
     local thinking="${PI_REASONING_LEVEL:-}"
     local full_model=""
-    if [ -n "$provider" ] && [ -n "$model" ]; then
+
+    if [ -n "$session_model" ]; then
+        full_model="$session_model"
+    elif [ -n "$provider" ] && [ -n "$model" ]; then
         full_model="$provider/$model"
     elif [ -n "$model" ]; then
         full_model="$model"
+    fi
+
+    if [ -n "$session_thinking" ]; then
+        thinking="$session_thinking"
     fi
     echo "$full_model|$thinking"
 }

@@ -34,9 +34,11 @@ disable-model-invocation: true
 - `<问题>` 必填，是讨论主题。
 - `--background` 可选；如果话题涉及敏感/禁忌边界，建议提供背景说明。
 
+wrapper 会自动从主 pi 的 session 文件读取当前 model/thinking，并写入 `models.md`；如果读取不到，则使用默认值。
+
 wrapper 会生成一个临时 spec 目录，并输出路径。
 
-**向用户展示 spec 路径，请用户查看/编辑该目录**（可以补充背景、各 agent 视角等）。
+**向用户展示 spec 路径，请用户查看/编辑该目录**（可以补充背景、各 agent 视角、或修改 `models.md` 中的 model/thinking）。
 
 **不要**让用户自行执行 `--start`。用户编辑完成后，告诉主 pi“继续”。
 
